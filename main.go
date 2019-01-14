@@ -8,14 +8,14 @@ import (
 	"strings"
 )
 
-type programsettings struct {
+type programSettings struct {
 	showVersion bool
 }
 
 var (
 	version  = "0.1"
 	cmdline  = ""
-	settings programsettings
+	settings programSettings
 )
 
 func init() {
