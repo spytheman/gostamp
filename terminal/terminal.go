@@ -2,6 +2,7 @@ package terminal
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -47,6 +48,7 @@ func TurnOnAbsoluteTimestamps() {
 }
 
 var t time.Time
+var mutex = &sync.Mutex{}
 func init() {
 	TurnOnColor()
 }
@@ -60,6 +62,7 @@ func Err(s string) {
 }
 
 func lineOut(tCode string, s string) {
+	mutex.Lock()
 	if absoluteTimestamps {
 		now := time.Now()
 		fmt.Printf("%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
@@ -75,10 +78,11 @@ func lineOut(tCode string, s string) {
 		}
 		fmt.Printf("%s[%12s]%s %s\n",
 			tCode,
-			time.Since(t).String(),
+			time.Since(t).Round(time.Microsecond).String(),
 			tColorLineEnd,
 			s)
 		t = time.Now()
 	}
+	mutex.Unlock()
 }
 

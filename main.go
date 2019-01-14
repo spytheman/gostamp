@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
+	"syscall"
 )
 
 type programSettings struct {
@@ -109,12 +110,18 @@ func main() {
 
 	startErr := command.Start()
 	if startErr != nil {
-		log.Panic(startErr)
+		terminal.Err("-->could not start, because of error: " + startErr.Error())
+		os.Exit(1);
 	}
 
 	waitError := command.Wait()
 	if waitError != nil {
 		terminal.Err( "-->finished with error: " + waitError.Error() )
+		if exitError, ok := waitError.(*exec.ExitError); ok {
+			if exitStatus, ok := exitError.Sys().(syscall.WaitStatus); ok {
+				defer os.Exit( exitStatus.ExitStatus() )
+			}
+		}
 	}
 
 	if settings.showEnd{
