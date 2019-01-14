@@ -30,9 +30,9 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "gostamp - Timestamp and colorize the stdout and stderr streams of CLI programs.\n")
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] program [programoptions] \n", os.Args[0])
-		fmt.Fprintf(flag.CommandLine.Output(), "  The options are:\n")
+		fmt.Fprintf(os.Stderr, "gostamp - Timestamp and colorize the stdout and stderr streams of CLI programs.\n")
+		fmt.Fprintf(os.Stderr, "Usage: %s [options] program [programoptions] \n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  The options are:\n")
 		flag.PrintDefaults()
 	}
 	flag.BoolVar(&settings.showVersion, "version", false, "show the tool version")
