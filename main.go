@@ -2,17 +2,17 @@ package main
 
 import (
 	"flag"
-	"os"
 	"fmt"
+	"os"
 )
 
-type Settings struct {
+type programsettings struct {
 	showVersion bool
 }
 
 var (
-	version  string = "0.1"
-	settings Settings
+	version  = "0.1"
+	settings programsettings
 )
 
 func init() {
@@ -20,9 +20,8 @@ func init() {
 	flag.Parse()
 	if settings.showVersion {
 		fmt.Println(version)
-		os.Exit(0)		
+		os.Exit(0)
 	}
-		
 }
 
 func main() {
