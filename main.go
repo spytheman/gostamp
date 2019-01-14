@@ -83,7 +83,7 @@ func main() {
 	wg.Add(2)
 
 	go func() {
-		_, err := io.Copy(commandIn, os.Stdin);
+		_, err := io.Copy(commandIn, os.Stdin)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -111,20 +111,20 @@ func main() {
 	startErr := command.Start()
 	if startErr != nil {
 		terminal.Err("-->could not start, because of error: " + startErr.Error())
-		os.Exit(1);
+		os.Exit(1)
 	}
 
 	waitError := command.Wait()
 	if waitError != nil {
-		terminal.Err( "-->finished with error: " + waitError.Error() )
+		terminal.Err("-->finished with error: " + waitError.Error())
 		if exitError, ok := waitError.(*exec.ExitError); ok {
 			if exitStatus, ok := exitError.Sys().(syscall.WaitStatus); ok {
-				defer os.Exit( exitStatus.ExitStatus() )
+				defer os.Exit(exitStatus.ExitStatus())
 			}
 		}
 	}
 
-	if settings.showEnd{
+	if settings.showEnd {
 		terminal.Out("End of '" + cmdline + "'")
 	}
 

@@ -13,12 +13,12 @@ func terminalColor2terminalCode(r, g, b uint8) int {
 	return 36*rr + 6*gg + bb + 16
 }
 
-// Foreground returns the closest matching terminal foreground color escape sequence
+// terminalColorCodeFG - returns the closest matching terminal foreground color escape sequence
 func terminalColorCodeFG(r, g, b uint8) string {
 	return fmt.Sprintf("\033[38;5;%dm", terminalColor2terminalCode(r, g, b))
 }
 
-// Background returns the closest matching terminal background color escape sequence
+// terminalColorCodeBG - returns the closest matching terminal background color escape sequence
 func terminalColorCodeBG(r, g, b uint8) string {
 	return fmt.Sprintf("\033[48;5%dm", terminalColor2terminalCode(r, g, b))
 }
@@ -43,12 +43,14 @@ func TurnOnColor() {
 }
 
 var absoluteTimestamps = false
+
 func TurnOnAbsoluteTimestamps() {
 	absoluteTimestamps = true
 }
 
 var t time.Time
 var mutex = &sync.Mutex{}
+
 func init() {
 	TurnOnColor()
 }
@@ -72,7 +74,7 @@ func lineOut(tCode string, s string) {
 			now.Nanosecond()/1000,
 			tColorLineEnd,
 			s)
-	}else{
+	} else {
 		if t.IsZero() {
 			t = time.Now()
 		}
@@ -85,4 +87,3 @@ func lineOut(tCode string, s string) {
 	}
 	mutex.Unlock()
 }
-
