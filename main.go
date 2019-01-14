@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -13,13 +14,13 @@ type programsettings struct {
 
 var (
 	version  = "0.1"
-	cmdline = ""
+	cmdline  = ""
 	settings programsettings
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "gostamp - Timestamp and colorize the stdout and stderr streams of CLI programs.\n", )
+		fmt.Fprintf(flag.CommandLine.Output(), "gostamp - Timestamp and colorize the stdout and stderr streams of CLI programs.\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] program [programoptions] \n", os.Args[0])
 		fmt.Fprintf(flag.CommandLine.Output(), "  The options are:\n")
 		flag.PrintDefaults()
@@ -39,4 +40,9 @@ func main() {
 	}
 	cmdline = strings.Join(flag.Args(), " ")
 	fmt.Printf("Running command: '%s' ...\n", cmdline)
+	command := exec.Command(flag.Args()[0], flag.Args()[1:]...)
+	startError := command.Start()
+	waitError := command.Wait()
+	fmt.Println("Start error: ", startError)
+	fmt.Println("Wait error: ", waitError)
 }
