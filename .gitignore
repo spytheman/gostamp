@@ -13,3 +13,5 @@
 gostamp
 *~
 .idea
+binaries/
+release/
