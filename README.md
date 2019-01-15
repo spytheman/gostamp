@@ -3,8 +3,8 @@ Timestamp and colorize the stdout and stderr streams of CLI programs.
 
 (based on an idea by HN user chrismorgan here: https://news.ycombinator.com/item?id=18898764)
 
-# Example 
-The example here shows 'gostamp' running 'make', which produces both stdout and stderr lines:
+# Example screenshot:
+This example shows 'gostamp' running 'make', which produces both stdout and stderr lines:
 
 ![example.png](./example.png)
 
