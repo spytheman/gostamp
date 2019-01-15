@@ -6,7 +6,7 @@ Timestamp and colorize the stdout and stderr streams of CLI programs.
 # Examples:
 This example shows a default invokation of 'gostamp', running 'make', which produces both stdout and stderr lines:
 
-![example.png](./example.png)
+![example.png](./examples/example.png)
 
 As you can see, it is easy to distinguish between stderr (red timestamps) and stdout (green timestamps).
 
