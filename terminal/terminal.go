@@ -2,6 +2,8 @@ package terminal
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"sync"
 	"time"
 )
@@ -55,19 +57,29 @@ func init() {
 	TurnOnColor()
 }
 
+var combineStderrAndStdout = false
+
+func TurnOnCombineStderrAndStdout() {
+	combineStderrAndStdout = true
+}
+
 func Out(s string) {
-	lineOut(tColorStdOut, s)
+	lineOut(os.Stdout, tColorStdOut, s)
 }
 
 func Err(s string) {
-	lineOut(tColorStdErr, s)
+	if combineStderrAndStdout {
+		lineOut(os.Stdout, tColorStdErr, s)
+	} else {
+		lineOut(os.Stderr, tColorStdErr, s)
+	}
 }
 
-func lineOut(tCode string, s string) {
+func lineOut(stream io.Writer, tCode string, s string) {
 	mutex.Lock()
 	if absoluteTimestamps {
 		now := time.Now()
-		fmt.Printf("%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
+		fmt.Fprintf(stream, "%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
 			tCode,
 			now.Year(), now.Month(), now.Day(),
 			now.Hour(), now.Minute(), now.Second(),
@@ -78,7 +90,7 @@ func lineOut(tCode string, s string) {
 		if t.IsZero() {
 			t = time.Now()
 		}
-		fmt.Printf("%s[%12s]%s %s\n",
+		fmt.Fprintf(stream, "%s[%12s]%s %s\n",
 			tCode,
 			time.Since(t).Round(time.Microsecond).String(),
 			tColorLineEnd,

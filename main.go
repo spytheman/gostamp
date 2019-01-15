@@ -20,6 +20,7 @@ type programSettings struct {
 	useAbsolute bool
 	showStart   bool
 	showEnd     bool
+	mergeErr    bool
 }
 
 var (
@@ -40,6 +41,7 @@ func init() {
 	flag.BoolVar(&settings.useAbsolute, "absolute", false, "use absolute timestamps")
 	flag.BoolVar(&settings.showStart, "start", true, "timestamp the start of the execution")
 	flag.BoolVar(&settings.showEnd, "end", true, "timestamp the end of the execution")
+	flag.BoolVar(&settings.mergeErr, "merge", false, "merge stderr to stdout. Useful for later filtering with grep.")
 	flag.Parse()
 	//fmt.Println(settings)
 	if settings.showVersion {
@@ -51,6 +53,9 @@ func init() {
 	}
 	if settings.useAbsolute {
 		terminal.TurnOnAbsoluteTimestamps()
+	}
+	if settings.mergeErr {
+		terminal.TurnOnCombineStderrAndStdout()
 	}
 }
 
@@ -87,7 +92,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		commandIn.Close()
+		_ = commandIn.Close()
 	}()
 
 	go func() {
