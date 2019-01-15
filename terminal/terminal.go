@@ -63,6 +63,12 @@ func TurnOnCombineStderrAndStdout() {
 	combineStderrAndStdout = true
 }
 
+var timeRelativeToStart = false
+
+func TurnOnTimeRelativeToStart() {
+	timeRelativeToStart = true
+}
+
 func Out(s string) {
 	lineOut(os.Stdout, tColorStdOut, s)
 }
@@ -95,7 +101,9 @@ func lineOut(stream io.Writer, tCode string, s string) {
 			time.Since(t).Round(time.Microsecond).String(),
 			tColorLineEnd,
 			s)
-		t = time.Now()
+		if !timeRelativeToStart {
+			t = time.Now()
+		}
 	}
 	mutex.Unlock()
 }

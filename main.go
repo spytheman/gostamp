@@ -21,6 +21,7 @@ type programSettings struct {
 	showStart   bool
 	showEnd     bool
 	mergeErr    bool
+	useElapsed  bool
 }
 
 var (
@@ -42,6 +43,7 @@ func init() {
 	flag.BoolVar(&settings.showStart, "start", true, "timestamp the start of the execution")
 	flag.BoolVar(&settings.showEnd, "end", true, "timestamp the end of the execution")
 	flag.BoolVar(&settings.mergeErr, "merge", false, "merge stderr to stdout. Useful for later filtering with grep.")
+	flag.BoolVar(&settings.useElapsed, "elapsed", false, "use timestamps, showing the elapsed time from the start of the program. Can not be used with -absolute")
 	flag.Parse()
 	//fmt.Println(settings)
 	if settings.showVersion {
@@ -54,6 +56,14 @@ func init() {
 	if settings.useAbsolute {
 		terminal.TurnOnAbsoluteTimestamps()
 	}
+	if settings.useElapsed {
+		terminal.TurnOnTimeRelativeToStart()
+	}
+	if settings.useAbsolute && settings.useElapsed {
+		fmt.Fprintf(os.Stderr, "-absolute and -elapsed can not be used together.\n")
+		os.Exit(-1)
+	}
+
 	if settings.mergeErr {
 		terminal.TurnOnCombineStderrAndStdout()
 	}
