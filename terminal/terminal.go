@@ -76,7 +76,6 @@ func init() {
 	go func() {
 		c := 0
 		for line := range tLines {
-			line.s = fmt.Sprintf("%10d : %s", c, line.s)
 			writeTerminalLine(line)
 			c++
 		}
