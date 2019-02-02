@@ -74,6 +74,7 @@ var allTerminalLinesAreFlushed = make(chan bool)
 func init() {
 	TurnOnColor()
 	go func() {
+		previousTerminalLineTime = time.Now()
 		c := 0
 		for line := range tLines {
 			writeTerminalLine(line)
@@ -127,9 +128,6 @@ func writeTerminalLine(tLine terminalLine) {
 			tColorLineEnd,
 			tLine.s)
 	} else {
-		if previousTerminalLineTime.IsZero() {
-			previousTerminalLineTime = tLine.timestamp
-		}
 		fmt.Fprintf(tLine.stream, "%s[%12s]%s %s\n",
 			tLine.tCode,
 			time.Since(previousTerminalLineTime).Round(timestampRoundResolution).String(),
