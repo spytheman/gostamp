@@ -50,6 +50,12 @@ func TurnOnAbsoluteTimestamps() {
 	absoluteTimestamps = true
 }
 
+var timestampRoundResolution time.Duration = time.Millisecond
+
+func TurnOnMicrosecondTimestampResolution() {
+	timestampRoundResolution = time.Microsecond
+}
+
 var t time.Time
 var mutex = &sync.Mutex{}
 
@@ -98,7 +104,7 @@ func lineOut(stream io.Writer, tCode string, s string) {
 		}
 		fmt.Fprintf(stream, "%s[%12s]%s %s\n",
 			tCode,
-			time.Since(t).Round(time.Microsecond).String(),
+			time.Since(t).Round(timestampRoundResolution).String(),
 			tColorLineEnd,
 			s)
 		if !timeRelativeToStart {

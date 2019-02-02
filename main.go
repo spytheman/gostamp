@@ -22,6 +22,7 @@ type programSettings struct {
 	showEnd     bool
 	mergeErr    bool
 	useElapsed  bool
+	microSecond bool
 }
 
 var (
@@ -44,6 +45,7 @@ func init() {
 	flag.BoolVar(&settings.showEnd, "end", true, "timestamp the end of the execution")
 	flag.BoolVar(&settings.mergeErr, "merge", false, "merge stderr to stdout. Useful for later filtering with grep.")
 	flag.BoolVar(&settings.useElapsed, "elapsed", false, "use timestamps, showing the elapsed time from the start of the program. Can not be used with -absolute")
+	flag.BoolVar(&settings.microSecond, "micro", false, "round timestamps to microseconds, instead of milliseconds. Can not be used with -absolute")
 	flag.Parse()
 	//fmt.Println(settings)
 	if settings.showVersion {
@@ -63,9 +65,16 @@ func init() {
 		fmt.Fprintf(os.Stderr, "-absolute and -elapsed can not be used together.\n")
 		os.Exit(-1)
 	}
+	if settings.useAbsolute && settings.microSecond {
+		fmt.Fprintf(os.Stderr, "-absolute and -micro can not be used together.\n")
+		os.Exit(-1)
+	}
 
 	if settings.mergeErr {
 		terminal.TurnOnCombineStderrAndStdout()
+	}
+	if settings.microSecond {
+		terminal.TurnOnMicrosecondTimestampResolution()
 	}
 }
 
