@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sync"
 	"time"
 )
 
@@ -50,17 +49,44 @@ func TurnOnAbsoluteTimestamps() {
 	absoluteTimestamps = true
 }
 
-var timestampRoundResolution time.Duration = time.Millisecond
+var timestampRoundResolution = time.Millisecond
 
 func TurnOnMicrosecondTimestampResolution() {
 	timestampRoundResolution = time.Microsecond
 }
 
-var t time.Time
-var mutex = &sync.Mutex{}
+var previousTerminalLineTime time.Time
+
+type terminalLine struct {
+	timestamp time.Time
+	stream    io.Writer
+	tCode     string
+	s         string
+}
+
+func newTerminalLine(stream io.Writer, tCode string, s string) terminalLine {
+	return terminalLine{timestamp: time.Now(), stream: stream, tCode: tCode, s: s}
+}
+
+var tLines = make(chan terminalLine, 10)
+var allTerminalLinesAreFlushed = make(chan bool)
 
 func init() {
 	TurnOnColor()
+	go func() {
+		c := 0
+		for line := range tLines {
+			line.s = fmt.Sprintf("%10d : %s", c, line.s)
+			writeTerminalLine(line)
+			c++
+		}
+		allTerminalLinesAreFlushed <- true
+	}()
+}
+
+func Shutdown() {
+	close(tLines)
+	<-allTerminalLinesAreFlushed // blocks till the tLines channel is drained
 }
 
 var combineStderrAndStdout = false
@@ -88,28 +114,30 @@ func Err(s string) {
 }
 
 func lineOut(stream io.Writer, tCode string, s string) {
-	mutex.Lock()
+	tLines <- newTerminalLine(stream, tCode, s)
+}
+
+func writeTerminalLine(tLine terminalLine) {
 	if absoluteTimestamps {
-		now := time.Now()
-		fmt.Fprintf(stream, "%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
-			tCode,
+		now := tLine.timestamp
+		fmt.Fprintf(tLine.stream, "%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
+			tLine.tCode,
 			now.Year(), now.Month(), now.Day(),
 			now.Hour(), now.Minute(), now.Second(),
 			now.Nanosecond()/1000,
 			tColorLineEnd,
-			s)
+			tLine.s)
 	} else {
-		if t.IsZero() {
-			t = time.Now()
+		if previousTerminalLineTime.IsZero() {
+			previousTerminalLineTime = tLine.timestamp
 		}
-		fmt.Fprintf(stream, "%s[%12s]%s %s\n",
-			tCode,
-			time.Since(t).Round(timestampRoundResolution).String(),
+		fmt.Fprintf(tLine.stream, "%s[%12s]%s %s\n",
+			tLine.tCode,
+			time.Since(previousTerminalLineTime).Round(timestampRoundResolution).String(),
 			tColorLineEnd,
-			s)
+			tLine.s)
 		if !timeRelativeToStart {
-			t = time.Now()
+			previousTerminalLineTime = tLine.timestamp
 		}
 	}
-	mutex.Unlock()
 }

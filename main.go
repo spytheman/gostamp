@@ -148,9 +148,11 @@ func main() {
 		}
 	}
 
+	wg.Wait()
+
 	if settings.showEnd {
 		terminal.Out("End of '" + cmdline + "'")
 	}
 
-	wg.Wait()
+	terminal.Shutdown()
 }
