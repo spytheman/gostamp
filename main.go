@@ -26,7 +26,7 @@ type programSettings struct {
 }
 
 var (
-	version  = "0.5"
+	version string
 	cmdline  = ""
 	settings programSettings
 )

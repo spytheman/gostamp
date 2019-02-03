@@ -1,5 +1,5 @@
 VERSION=0.5
-
+GOBUILD?=go build -ldflags "-X main.version=$(VERSION)"
 .PHONY: clean binaries release
 
 clean: 
@@ -8,25 +8,25 @@ clean:
 binaries: binaries/osx_x86_64/gostamp binaries/windows_x86_64/gostamp.exe binaries/linux_x86_64/gostamp binaries/osx_x86_32/gostamp binaries/windows_x86_32/gostamp.exe binaries/linux_x86_32/gostamp
 	
 binaries/osx_x86_64/gostamp:
-	GOOS=darwin GOARCH=amd64 go build  -o binaries/osx_x86_64/gostamp 
+	GOOS=darwin GOARCH=amd64  $(GOBUILD)  -o binaries/osx_x86_64/gostamp 
 
 binaries/osx_x86_32/gostamp:
-	GOOS=darwin GOARCH=386 go build  -o binaries/osx_x86_32/gostamp 
+	GOOS=darwin GOARCH=386    $(GOBUILD)  -o binaries/osx_x86_32/gostamp 
 
 binaries/windows_x86_64/gostamp.exe:
-	GOOS=windows GOARCH=amd64 go build  -o binaries/windows_x86_64/gostamp.exe 
+	GOOS=windows GOARCH=amd64 $(GOBUILD)  -o binaries/windows_x86_64/gostamp.exe 
 
 binaries/windows_x86_32/gostamp.exe:
-	GOOS=windows GOARCH=386 go build  -o binaries/windows_x86_32/gostamp.exe 
+	GOOS=windows GOARCH=386   $(GOBUILD)  -o binaries/windows_x86_32/gostamp.exe 
 
 binaries/linux_x86_64/gostamp:
-	GOOS=linux GOARCH=amd64 go build  -o binaries/linux_x86_64/gostamp 
+	GOOS=linux GOARCH=amd64   $(GOBUILD)  -o binaries/linux_x86_64/gostamp 
 
 binaries/linux_x86_32/gostamp:
-	GOOS=linux GOARCH=386 go build  -o binaries/linux_x86_32/gostamp 
+	GOOS=linux GOARCH=386     $(GOBUILD)  -o binaries/linux_x86_32/gostamp 
 
 binaries/linux_arm64/gostamp:
-	GOOS=linux GOARCH=arm64 go build  -o binaries/linux_arm64/gostamp 
+	GOOS=linux GOARCH=arm64   $(GOBUILD)  -o binaries/linux_arm64/gostamp 
 
 release: binaries
 	mkdir -p release/ ;
