@@ -135,7 +135,7 @@ func main() {
 	startErr := command.Start()
 	if startErr != nil {
 		terminal.Err("-->could not start, because of error: " + startErr.Error())
-		os.Exit(1)
+		defer os.Exit(1)
 	}
 
 	waitError := command.Wait()
