@@ -31,3 +31,6 @@ binaries/linux_arm64/gostamp:
 release: binaries
 	mkdir -p release/ ;
 	cd binaries/; for i in *; do cd $$i/ ; zip -r -D ../../release/gostamp_$(VERSION)_$$i.zip *; cd ../ ; done
+
+format:
+	gofmt -w main.go terminal/terminal.go
