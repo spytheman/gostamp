@@ -129,9 +129,11 @@ func main() {
 	}()
 
 	if settings.showStart {
+		terminal.ResetPreviousTerminalLineTime()
 		terminal.Out("Start of '" + cmdline + "'")
 	}
 
+	// Setup is finished at this point. Run the command and process the results:
 	startErr := command.Start()
 	if startErr != nil {
 		terminal.Err("-->could not start, because of error: " + startErr.Error())

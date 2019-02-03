@@ -74,7 +74,7 @@ var allTerminalLinesAreFlushed = make(chan bool)
 func init() {
 	TurnOnColor()
 	go func() {
-		previousTerminalLineTime = time.Now()
+		ResetPreviousTerminalLineTime()
 		c := 0
 		for line := range tLines {
 			writeTerminalLine(line)
@@ -82,6 +82,10 @@ func init() {
 		}
 		allTerminalLinesAreFlushed <- true
 	}()
+}
+
+func ResetPreviousTerminalLineTime() {
+	previousTerminalLineTime = time.Now()
 }
 
 func Shutdown() {
