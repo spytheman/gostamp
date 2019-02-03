@@ -34,3 +34,6 @@ release: binaries
 
 format:
 	gofmt -w main.go terminal/terminal.go
+
+install:
+	go install -ldflags "-X main.version=$(VERSION)"
