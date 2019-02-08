@@ -19,11 +19,6 @@ func terminalColorCodeFG(r, g, b uint8) string {
 	return fmt.Sprintf("\033[38;5;%dm", terminalColor2terminalCode(r, g, b))
 }
 
-// terminalColorCodeBG - returns the closest matching terminal background color escape sequence
-func terminalColorCodeBG(r, g, b uint8) string {
-	return fmt.Sprintf("\033[48;5%dm", terminalColor2terminalCode(r, g, b))
-}
-
 // This escape code resets the terminal foreground and background colors
 const terminalColorCodeReset = "\033[0;00m"
 
@@ -38,8 +33,8 @@ func TurnOffColor() {
 }
 
 func TurnOnColor() {
-	tColorStdOut = terminalColorCodeReset + terminalColorCodeFG(128, 255, 128) + terminalColorCodeBG(0, 0, 0)
-	tColorStdErr = terminalColorCodeReset + terminalColorCodeFG(255, 0, 0) + terminalColorCodeBG(0, 0, 0)
+	tColorStdOut = terminalColorCodeReset + terminalColorCodeFG(128, 255, 128) 
+	tColorStdErr = terminalColorCodeReset + terminalColorCodeFG(255, 0, 0) 
 	tColorLineEnd = terminalColorCodeReset
 }
 
