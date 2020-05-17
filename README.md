@@ -28,13 +28,15 @@ The example below shows the effect of the -absolute option:
       -color
             colorize the output (default true)
       -elapsed
-            use timestamps, showing the elapsed time from the start of the program. Can not be used with -absolute
+            use timestamps, showing the elapsed time from the start of the program.
+            Can not be used with -absolute
       -end
             timestamp the end of the execution (default true)
       -merge
             merge stderr to stdout. Useful for later filtering with grep.
       -micro
-            round timestamps to microseconds, instead of milliseconds. Can not be used with -absolute
+            round timestamps to microseconds, instead of milliseconds.
+            Can not be used with -absolute
       -start
             timestamp the start of the execution (default true)
       -version
