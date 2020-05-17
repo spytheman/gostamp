@@ -19,7 +19,7 @@ The example below shows the effect of the -absolute option:
 # Installation:
     go get -u github.com/spytheman/gostamp
 
-# Usage:    
+# Usage:
     gostamp - Timestamp and colorize the stdout and stderr streams of CLI programs.
     Usage: gostamp [options] program [programoptions] 
       The options are:
@@ -27,10 +27,14 @@ The example below shows the effect of the -absolute option:
             use absolute timestamps
       -color
             colorize the output (default true)
+      -elapsed
+            use timestamps, showing the elapsed time from the start of the program. Can not be used with -absolute
       -end
             timestamp the end of the execution (default true)
       -merge
             merge stderr to stdout. Useful for later filtering with grep.
+      -micro
+            round timestamps to microseconds, instead of milliseconds. Can not be used with -absolute
       -start
             timestamp the start of the execution (default true)
       -version
