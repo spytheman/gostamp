@@ -23,10 +23,11 @@ type programSettings struct {
 	mergeErr    bool
 	useElapsed  bool
 	microSecond bool
+	nobuffering bool
 }
 
 var (
-	version string
+	version  string
 	cmdline  = ""
 	settings programSettings
 )
@@ -46,6 +47,7 @@ func init() {
 	flag.BoolVar(&settings.mergeErr, "merge", false, "merge stderr to stdout. Useful for later filtering with grep.")
 	flag.BoolVar(&settings.useElapsed, "elapsed", false, "use timestamps, showing the elapsed time from the start of the program. Can not be used with -absolute")
 	flag.BoolVar(&settings.microSecond, "micro", false, "round timestamps to microseconds, instead of milliseconds. Can not be used with -absolute")
+	flag.BoolVar(&settings.nobuffering, "nobuf", false, "run the program with stdbuf -i0 -oL -eL, i.e. with *buffering off* for the std streams")
 	flag.Parse()
 	//fmt.Println(settings)
 	if settings.showVersion {
@@ -83,10 +85,17 @@ func main() {
 		flag.Usage()
 		os.Exit(1)
 	}
-	cmdline = strings.Join(flag.Args(), " ")
+
+	var cmd_args []string
+	if settings.nobuffering {
+		cmd_args = append(cmd_args, []string{"stdbuf", "-i0", "-oL", "-eL"}...)
+	}
+	cmd_args = append(cmd_args, flag.Args()...)
+
+	cmdline = strings.Join(cmd_args, " ")
 	//fmt.Printf("Running command: '%s' ...\n", cmdline)
 
-	command := exec.Command(flag.Args()[0], flag.Args()[1:]...)
+	command := exec.Command(cmd_args[0], cmd_args[1:]...)
 
 	commandIn, commandInErr := command.StdinPipe()
 	if commandInErr != nil {

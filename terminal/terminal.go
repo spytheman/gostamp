@@ -33,8 +33,8 @@ func TurnOffColor() {
 }
 
 func TurnOnColor() {
-	tColorStdOut = terminalColorCodeReset + terminalColorCodeFG(128, 255, 128) 
-	tColorStdErr = terminalColorCodeReset + terminalColorCodeFG(255, 0, 0) 
+	tColorStdOut = terminalColorCodeReset + terminalColorCodeFG(128, 255, 128)
+	tColorStdErr = terminalColorCodeReset + terminalColorCodeFG(255, 0, 0)
 	tColorLineEnd = terminalColorCodeReset
 }
 
