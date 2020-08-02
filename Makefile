@@ -1,4 +1,4 @@
-VERSION=0.5
+VERSION=0.6
 GOBUILD?=go build -ldflags "-X main.version=$(VERSION)"
 .PHONY: clean binaries release
 
