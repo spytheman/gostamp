@@ -1,17 +1,14 @@
-VERSION=0.6
+VERSION=0.7
 GOBUILD?=go build -ldflags "-X main.version=$(VERSION)"
 .PHONY: clean binaries release
 
 clean: 
 	rm -rf binaries/ release/ gostamp
 
-binaries: binaries/osx_x86_64/gostamp binaries/windows_x86_64/gostamp.exe binaries/linux_x86_64/gostamp binaries/osx_x86_32/gostamp binaries/windows_x86_32/gostamp.exe binaries/linux_x86_32/gostamp
+binaries: binaries/osx_x86_64/gostamp binaries/windows_x86_64/gostamp.exe binaries/linux_x86_64/gostamp binaries/windows_x86_32/gostamp.exe binaries/linux_x86_32/gostamp
 	
 binaries/osx_x86_64/gostamp:
 	GOOS=darwin GOARCH=amd64  $(GOBUILD)  -o binaries/osx_x86_64/gostamp 
-
-binaries/osx_x86_32/gostamp:
-	GOOS=darwin GOARCH=386    $(GOBUILD)  -o binaries/osx_x86_32/gostamp 
 
 binaries/windows_x86_64/gostamp.exe:
 	GOOS=windows GOARCH=amd64 $(GOBUILD)  -o binaries/windows_x86_64/gostamp.exe 
