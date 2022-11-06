@@ -119,21 +119,41 @@ func lineOut(stream io.Writer, tCode string, s string) {
 func writeTerminalLine(tLine terminalLine) {
 	if absoluteTimestamps {
 		now := tLine.timestamp
-		fmt.Fprintf(tLine.stream, "%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
-			tLine.tCode,
-			now.Year(), now.Month(), now.Day(),
-			now.Hour(), now.Minute(), now.Second(),
-			now.Nanosecond()/1000,
-			tColorLineEnd,
-			tLine.s)
+		if csvOutput {
+			fmt.Fprintf(tLine.stream, "%04d-%02d-%02d %02d:%02d:%02d.%06d,%s\n",
+				now.Year(), now.Month(), now.Day(),
+				now.Hour(), now.Minute(), now.Second(),
+				now.Nanosecond()/1000,
+				tLine.s)
+		} else {
+			fmt.Fprintf(tLine.stream, "%s[%04d-%02d-%02d %02d:%02d:%02d.%06d]%s %s\n",
+				tLine.tCode,
+				now.Year(), now.Month(), now.Day(),
+				now.Hour(), now.Minute(), now.Second(),
+				now.Nanosecond()/1000,
+				tColorLineEnd,
+				tLine.s)
+		}
 	} else {
-		fmt.Fprintf(tLine.stream, "%s[%12s]%s %s\n",
-			tLine.tCode,
-			time.Since(previousTerminalLineTime).Round(timestampRoundResolution).String(),
-			tColorLineEnd,
-			tLine.s)
+		if csvOutput {
+			fmt.Fprintf(tLine.stream, "%12d,%s\n",
+				time.Since(previousTerminalLineTime),
+				tLine.s)
+		} else {
+			fmt.Fprintf(tLine.stream, "%s[%12s]%s %s\n",
+				tLine.tCode,
+				time.Since(previousTerminalLineTime).Round(timestampRoundResolution).String(),
+				tColorLineEnd,
+				tLine.s)
+		}
 		if !timeRelativeToStart {
 			previousTerminalLineTime = tLine.timestamp
 		}
 	}
+}
+
+var csvOutput = false
+
+func TurnOnCsv() {
+	csvOutput = true
 }

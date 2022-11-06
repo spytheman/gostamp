@@ -18,6 +18,7 @@ type programSettings struct {
 	showVersion bool
 	useColor    bool
 	useAbsolute bool
+	useCsv      bool
 	showStart   bool
 	showEnd     bool
 	mergeErr    bool
@@ -41,6 +42,7 @@ func init() {
 	}
 	flag.BoolVar(&settings.showVersion, "version", false, "show the tool version")
 	flag.BoolVar(&settings.useColor, "color", true, "colorize the output")
+	flag.BoolVar(&settings.useCsv, "csv", false, "do not format the output at all, just show the time in ns, followed by ',' then the output")
 	flag.BoolVar(&settings.useAbsolute, "absolute", false, "use absolute timestamps")
 	flag.BoolVar(&settings.showStart, "start", true, "timestamp the start of the execution")
 	flag.BoolVar(&settings.showEnd, "end", true, "timestamp the end of the execution")
@@ -56,6 +58,9 @@ func init() {
 	}
 	if !settings.useColor {
 		terminal.TurnOffColor()
+	}
+	if settings.useCsv {
+		terminal.TurnOnCsv()
 	}
 	if settings.useAbsolute {
 		terminal.TurnOnAbsoluteTimestamps()
