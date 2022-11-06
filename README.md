@@ -27,16 +27,18 @@ The example below shows the effect of the -absolute option:
             use absolute timestamps
       -color
             colorize the output (default true)
+      -csv
+            do not format the output at all, just show the time in ns, followed by ',' then the output
       -elapsed
-            use timestamps, showing the elapsed time from the start of the program.
-            Can not be used with -absolute
+            use timestamps, showing the elapsed time from the start of the program. Can not be used with -absolute
       -end
             timestamp the end of the execution (default true)
       -merge
             merge stderr to stdout. Useful for later filtering with grep.
       -micro
-            round timestamps to microseconds, instead of milliseconds.
-            Can not be used with -absolute
+            round timestamps to microseconds, instead of milliseconds. Can not be used with -absolute
+      -nobuf
+            run the program with stdbuf -i0 -oL -eL, i.e. with *buffering off* for the std streams
       -start
             timestamp the start of the execution (default true)
       -version
