@@ -17,7 +17,7 @@ The example below shows the effect of the -absolute option:
 
 
 # Installation:
-    go get -u github.com/spytheman/gostamp
+    go install github.com/spytheman/gostamp@latest
 
 # Usage:
     gostamp - Timestamp and colorize the stdout and stderr streams of CLI programs.
